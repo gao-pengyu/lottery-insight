@@ -1,0 +1,146 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model LotteryType {
+  id          String       @id @default(cuid())
+  code        String       @unique
+  name        String
+  category    String
+  status      String       @default("enabled")
+  officialUrl String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  draws       DrawResult[]
+  articles    Article[]
+}
+
+model DrawResult {
+  id              String          @id @default(cuid())
+  lotteryTypeId   String
+  lotteryType     LotteryType     @relation(fields: [lotteryTypeId], references: [id])
+  issueNo         String
+  drawDate        DateTime
+  redNumbersJson  String
+  blueNumbersJson String
+  salesAmount     Float           @default(0)
+  poolAmount      Float           @default(0)
+  sourceName      String
+  sourceUrl       String
+  fetchedAt       DateTime        @default(now())
+  verifiedStatus  String          @default("verified")
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  prizeLevels     PrizeLevel[]
+  regions         WinningRegion[]
+  stations        WinningStation[]
+
+  @@unique([lotteryTypeId, issueNo])
+  @@index([drawDate])
+}
+
+model PrizeLevel {
+  id            String     @id @default(cuid())
+  drawResultId  String
+  drawResult    DrawResult @relation(fields: [drawResultId], references: [id], onDelete: Cascade)
+  level         String
+  winningCount  Int
+  prizeAmount   Float
+  totalAmount   Float
+  createdAt     DateTime   @default(now())
+}
+
+model WinningRegion {
+  id            String     @id @default(cuid())
+  drawResultId  String
+  drawResult    DrawResult @relation(fields: [drawResultId], references: [id], onDelete: Cascade)
+  province      String
+  city          String?
+  winningCount  Int
+  amount        Float
+  sourceUrl     String?
+  createdAt     DateTime   @default(now())
+}
+
+model WinningStation {
+  id            String     @id @default(cuid())
+  drawResultId  String
+  drawResult    DrawResult @relation(fields: [drawResultId], references: [id], onDelete: Cascade)
+  stationNo     String
+  province      String
+  city          String?
+  district      String?
+  address       String
+  amount        Float
+  articleId     String?
+  sourceUrl     String?
+  createdAt     DateTime   @default(now())
+}
+
+model Article {
+  id            String       @id @default(cuid())
+  title         String
+  summary       String
+  contentHash   String       @unique
+  sourceName    String
+  sourceUrl     String       @unique
+  publishedAt   DateTime
+  fetchedAt     DateTime     @default(now())
+  category      String
+  lotteryTypeId String?
+  lotteryType   LotteryType? @relation(fields: [lotteryTypeId], references: [id])
+  issueNo       String?
+  province      String?
+  city          String?
+  amountText    String?
+  credibility   String       @default("官方")
+  status        String       @default("published")
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@index([category])
+  @@index([publishedAt])
+}
+
+model PredictionRecord {
+  id             String   @id @default(cuid())
+  lotteryTypeId  String
+  targetIssueNo  String
+  mode           String
+  rulesJson      String
+  numbersJson    String
+  score          Float
+  explanation    String
+  hitResultJson  String?
+  createdAt      DateTime @default(now())
+}
+
+model CrawlerJob {
+  id           String    @id @default(cuid())
+  jobType      String
+  sourceName   String
+  status       String
+  startedAt    DateTime  @default(now())
+  finishedAt   DateTime?
+  successCount Int       @default(0)
+  failedCount  Int       @default(0)
+  errorMessage String?
+  createdAt    DateTime  @default(now())
+}
+
+model DataQualityIssue {
+  id          String    @id @default(cuid())
+  issueType   String
+  entityType  String
+  entityId    String
+  description String
+  severity    String
+  status      String    @default("pending")
+  createdAt   DateTime  @default(now())
+  resolvedAt  DateTime?
+}

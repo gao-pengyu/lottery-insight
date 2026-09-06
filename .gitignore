@@ -1,0 +1,28 @@
+# 依赖
+node_modules/
+
+# Next.js 构建产物
+.next/
+out/
+
+# 本地环境变量
+.env
+.env*.local
+
+# 本地运行数据和备份
+/data/db.json
+/data/*.backup.*.json
+
+# 日志
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 系统文件
+.DS_Store
+
+# 编辑器
+.vscode/
+.idea/

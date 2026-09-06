@@ -1,0 +1,13 @@
+---
+description: 彩数洞察项目规则
+alwaysApply: true
+---
+
+# 彩数洞察项目规则
+
+- 修改前先阅读 `AGENTS.md`。
+- 修改产品文案或预测行为前，先阅读 `docs/rules/COMPLIANCE.md`。
+- 运行时数据源是 `data/db.json`，由 `src/lib/store.ts` 读写。
+- 不要新增售彩、支付、代购、合买、投注或保证中奖功能。
+- 保持 `src/lib/analysis.ts` 和 `src/lib/prediction.ts` 为纯逻辑，并用测试覆盖。
+- 声明完成前运行 `npm test` 和 `npm run build`。

@@ -1,0 +1,44 @@
+{
+  "name": "lottery-insight",
+  "version": "1.0.0",
+  "description": "彩数洞察：本地可运行的双色球数据分析与娱乐性号码生成网站 MVP",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest run",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:seed": "tsx prisma/seed.ts",
+    "setup": "npm run db:seed",
+    "local:start": "./scripts/start-local.sh",
+    "local:stop": "./scripts/stop-local.sh",
+    "local:status": "./scripts/status-local.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@next/env": "latest",
+    "@prisma/client": "^6.19.0",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "recharts": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "eslint": "latest",
+    "eslint-config-next": "latest",
+    "prisma": "^6.19.0",
+    "tsx": "^4.23.13",
+    "typescript": "latest",
+    "vitest": "latest"
+  }
+}

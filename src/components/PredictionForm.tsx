@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { BallGroup } from "./Ball";
+import { parseNumberList } from "@/lib/number-input";
 import type { PredictionMode, PredictionResult } from "@/lib/types";
 
 const modes: Array<{ value: PredictionMode; label: string }> = [
@@ -12,12 +13,6 @@ const modes: Array<{ value: PredictionMode; label: string }> = [
   { value: "custom", label: "自定义规则" }
 ];
 
-function parseNumberList(value: string): number[] {
-  return value
-    .split(/[，,\s]+/)
-    .map((item) => Number(item.trim()))
-    .filter((item) => Number.isInteger(item));
-}
 
 export function PredictionForm() {
   const [mode, setMode] = useState<PredictionMode>("mixed");

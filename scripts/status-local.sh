@@ -2,8 +2,17 @@
 set -euo pipefail
 
 PORT="${PORT:-3000}"
-PID_FILE="${PID_FILE:-/tmp/lottery-insight-next.pid}"
+LABEL="${LABEL:-com.lottery-insight.local}"
+PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
 LOG_FILE="${LOG_FILE:-/tmp/lottery-insight-next.log}"
+ERROR_LOG_FILE="${ERROR_LOG_FILE:-/tmp/lottery-insight-next.error.log}"
+USER_ID="$(id -u)"
+
+if launchctl print "gui/$USER_ID/$LABEL" >/dev/null 2>&1; then
+  echo "macOS 常驻服务已加载：$LABEL"
+else
+  echo "macOS 常驻服务未加载：$LABEL"
+fi
 
 if lsof -nP -iTCP:"$PORT" -sTCP:LISTEN >/dev/null 2>&1; then
   echo "彩数洞察正在 $PORT 端口运行。"
@@ -15,10 +24,8 @@ if lsof -nP -iTCP:"$PORT" -sTCP:LISTEN >/dev/null 2>&1; then
   fi
 else
   echo "彩数洞察没有监听 $PORT 端口。"
-  if [ -f "$PID_FILE" ]; then
-    echo "可能存在过期进程号文件：$PID_FILE"
-  fi
 fi
 
-echo "进程号文件：$PID_FILE"
-echo "日志文件：$LOG_FILE"
+echo "配置文件：$PLIST"
+echo "标准日志：$LOG_FILE"
+echo "错误日志：$ERROR_LOG_FILE"

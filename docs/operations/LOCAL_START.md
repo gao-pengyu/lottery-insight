@@ -24,7 +24,7 @@ npm run local:start
 4. 执行 `npm run build` 构建生产包。
 5. 执行 `npm run start -- -H 0.0.0.0 -p 3000` 启动服务。
 6. 将日志写到 `/tmp/lottery-insight-next.log`。
-7. 将进程号写到 `/tmp/lottery-insight-next.pid`。
+7. 写入并加载 macOS 常驻服务配置 `~/Library/LaunchAgents/com.lottery-insight.local.plist`。
 
 ## 2. 访问地址
 
@@ -78,13 +78,7 @@ npm run local:stop
 ./scripts/stop-local.sh
 ```
 
-该脚本会优先读取：
-
-```text
-/tmp/lottery-insight-next.pid
-```
-
-如果 PID 文件不存在，则会查找 3000 端口上的监听进程并停止。
+该脚本会优先停止 macOS 常驻服务 `com.lottery-insight.local`，然后检查 3000 端口上是否还有残留进程并停止。
 
 ## 5. 自定义端口
 
